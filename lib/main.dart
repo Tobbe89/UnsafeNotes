@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:unsafenote/screens/main.dart';
+import 'package:provider/provider.dart';
+import 'package:unsafenote/provider/note_provider.dart';
+import 'package:unsafenote/screens/first.dart';
 import 'package:unsafenote/screens/second.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => NoteProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

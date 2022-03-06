@@ -14,9 +14,13 @@ class NoteProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addNote(NoteModel note) async {
-    await NoteDb.instance.createNote(note);
+  void addNote(NoteModel note) {
+    NoteDb.instance.createNote(note);
     getNotes;
+  }
+
+  List<NoteModel> getNoteList() {
+    return notes.toList();
   }
 
   void deleteNote(int id) {
