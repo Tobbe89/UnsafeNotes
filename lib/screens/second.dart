@@ -14,7 +14,7 @@ class AddNote extends StatefulWidget {
 }
 
 class _AddNoteState extends State<AddNote> {
-  late String? header;
+  //late String? header;
   late String content;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
@@ -25,8 +25,7 @@ class _AddNoteState extends State<AddNote> {
 
   @override
   void addSong(BuildContext context) {
-    final note = NoteModel(
-        header: header, content: content, createdTime: DateTime.now());
+    final note = NoteModel(content: content, createdTime: DateTime.now());
 
     context.read<NoteProvider>().addNote(note);
   }
@@ -38,17 +37,20 @@ class _AddNoteState extends State<AddNote> {
             key: _formkey,
             child: ListView(
               children: [
+                // TextFormField(
+                //   // validator: (value) {
+                //   //   if (value?.isEmpty ?? true) {
+                //   //     return "Skriv din header";
+                //   //   } else {
+                //   //     return null;
+                //   //   }
+                //   // },
+                //   onChanged: (value) => {setState(() => header = value)},
+                // ),
                 TextFormField(
-                  // validator: (value) {
-                  //   if (value?.isEmpty ?? true) {
-                  //     return "Skriv din header";
-                  //   } else {
-                  //     return null;
-                  //   }
-                  // },
-                  onChanged: (value) => {setState(() => header = value)},
-                ),
-                TextFormField(
+                  expands: false,
+                  minLines: 1,
+                  maxLines: 8,
                   validator: (value) {
                     if (value?.isEmpty ?? true) {
                       return "Skriv din note";

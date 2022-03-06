@@ -34,12 +34,13 @@ class NoteDb {
   Future _createDB(Database db, int version) async {
     const primaryIdType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
     const textType = 'TEXT NOT NULL';
+    const textTypeNull = 'TEXT NULL';
     const integerType = 'INTEGER NOT NULL';
 
     await db.execute('''
     CREATE TABLE $tableNote (
       ${NoteFields.id} $primaryIdType,
-      ${NoteFields.header} $textType, 
+      ${NoteFields.header} $textTypeNull, 
       ${NoteFields.content} $textType,
       ${NoteFields.createdTime} $textType
     )

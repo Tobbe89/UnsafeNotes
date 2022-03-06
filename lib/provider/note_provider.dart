@@ -23,7 +23,7 @@ class NoteProvider extends ChangeNotifier {
     return notes.toList();
   }
 
-  void deleteNote(int id) {
+  void deleteNote(int? id) {
     notes.removeWhere((element) => element.id == id);
     notifyListeners();
     NoteDb.instance.delete(id);
