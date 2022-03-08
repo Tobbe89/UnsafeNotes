@@ -49,7 +49,11 @@ class NoteElement extends StatelessWidget {
               ]),
           child: ListTile(
             //leading: Icon(Icons.music_note),
-            subtitle: Text(note.content),
+            subtitle: Padding(
+              padding:
+                  const EdgeInsets.only(left: 2, top: 5, bottom: 5, right: 2),
+              child: Text(note.content),
+            ),
           ),
           margin: const EdgeInsets.all(20),
         ),

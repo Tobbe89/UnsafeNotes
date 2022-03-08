@@ -18,16 +18,18 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Consumer<NoteProvider>(
       builder: (context, value, child) {
-        return RefreshIndicator(
-          onRefresh: () async {},
-          child: Scaffold(
-              // backgroundColor: Colors.blue[900],
-              body: value.getNoteList().isEmpty
-                  ? const Text("Tomt!")
-                  : Scrollbar(
-                      controller: _scroll,
-                      isAlwaysShown: true,
-                      child: buildNote(context))),
+        return SafeArea(
+          child: RefreshIndicator(
+            onRefresh: () async {},
+            child: Scaffold(
+                // backgroundColor: Colors.blue[900],
+                body: value.getNoteList().isEmpty
+                    ? const Text("Tomt!")
+                    : Scrollbar(
+                        controller: _scroll,
+                        isAlwaysShown: true,
+                        child: buildNote(context))),
+          ),
         );
       },
     );
