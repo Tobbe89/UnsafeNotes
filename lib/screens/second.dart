@@ -4,6 +4,7 @@ import 'package:unsafenote/db/NoteDb.dart';
 import 'package:unsafenote/main.dart';
 import 'package:unsafenote/model/note_model.dart';
 import 'package:unsafenote/provider/note_provider.dart';
+import 'package:unsafenote/screens/card_widgets.dart/custom_button.dart';
 import 'package:unsafenote/screens/first.dart';
 
 class AddNote extends StatefulWidget {
@@ -33,55 +34,60 @@ class _AddNoteState extends State<AddNote> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Form(
-            key: _formkey,
-            child: ListView(
-              children: [
-                const SizedBox(
-                  height: 30,
-                ),
-                const Icon(
-                  Icons.note_add,
-                  size: 150,
-                  color: Color(0xFFE0E1E9),
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                // TextFormField(
-                //   // validator: (value) {
-                //   //   if (value?.isEmpty ?? true) {
-                //   //     return "Skriv din header";
-                //   //   } else {
-                //   //     return null;
-                //   //   }
-                //   // },
-                //   onChanged: (value) => {setState(() => header = value)},
-                // ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                    ),
-                    expands: false,
-                    minLines: 1,
-                    maxLines: 8,
-                    validator: (value) {
-                      if (value?.isEmpty ?? true) {
-                        return "Skriv din note";
-                      } else {
-                        return null;
-                      }
-                    },
-                    onChanged: (value) => {setState(() => content = value)},
+      body: Form(
+          key: _formkey,
+          child: ListView(
+            children: [
+              const SizedBox(
+                height: 100,
+              ),
+              // TextFormField(
+              //   // validator: (value) {
+              //   //   if (value?.isEmpty ?? true) {
+              //   //     return "Skriv din header";
+              //   //   } else {
+              //   //     return null;
+              //   //   }
+              //   // },
+              //   onChanged: (value) => {setState(() => header = value)},
+              // ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: "Add here:",
+                    contentPadding: EdgeInsets.all(20),
+                    border: OutlineInputBorder(),
                   ),
-                )
-              ],
-            )),
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          onPressed: () => {
+                  expands: false,
+                  minLines: 1,
+                  maxLines: 8,
+                  validator: (value) {
+                    if (value?.isEmpty ?? true) {
+                      return "Skriv din note";
+                    } else {
+                      return null;
+                    }
+                  },
+                  onChanged: (value) => {setState(() => content = value)},
+                ),
+              ),
+
+              const SizedBox(
+                height: 50,
+              ),
+              const Icon(
+                Icons.note_add,
+                size: 150,
+                color: Color(0xFFE0E1E9),
+              ),
+            ],
+          )),
+      floatingActionButton:
+          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+        CustomButton(
+          text: "Save",
+          onSelected: () => {
             if (!_formkey.currentState!.validate())
               {_formkey.currentState!.save()}
             else
@@ -91,6 +97,8 @@ class _AddNoteState extends State<AddNote> {
                     MaterialPageRoute(builder: (context) => const MyHomePage()))
               }
           },
-        ));
+        ),
+      ]),
+    );
   }
 }
