@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:unsafenote/provider/note_provider.dart';
+import 'package:unsafenote/screens/card_widgets.dart/dialog.dart';
 import 'package:unsafenote/screens/card_widgets.dart/note_element.dart';
 
 class MainPage extends StatefulWidget {
@@ -20,7 +21,7 @@ class _MainPageState extends State<MainPage> {
         return RefreshIndicator(
           onRefresh: () async {},
           child: Scaffold(
-              backgroundColor: Colors.blue[900],
+              // backgroundColor: Colors.blue[900],
               body: value.getNoteList().isEmpty
                   ? const Text("Tomt!")
                   : Scrollbar(

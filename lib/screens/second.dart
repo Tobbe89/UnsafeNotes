@@ -37,6 +37,17 @@ class _AddNoteState extends State<AddNote> {
             key: _formkey,
             child: ListView(
               children: [
+                const SizedBox(
+                  height: 30,
+                ),
+                const Icon(
+                  Icons.note_add,
+                  size: 150,
+                  color: Color(0xFFE0E1E9),
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
                 // TextFormField(
                 //   // validator: (value) {
                 //   //   if (value?.isEmpty ?? true) {
@@ -47,22 +58,29 @@ class _AddNoteState extends State<AddNote> {
                 //   // },
                 //   onChanged: (value) => {setState(() => header = value)},
                 // ),
-                TextFormField(
-                  expands: false,
-                  minLines: 1,
-                  maxLines: 8,
-                  validator: (value) {
-                    if (value?.isEmpty ?? true) {
-                      return "Skriv din note";
-                    } else {
-                      return null;
-                    }
-                  },
-                  onChanged: (value) => {setState(() => content = value)},
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                    ),
+                    expands: false,
+                    minLines: 1,
+                    maxLines: 8,
+                    validator: (value) {
+                      if (value?.isEmpty ?? true) {
+                        return "Skriv din note";
+                      } else {
+                        return null;
+                      }
+                    },
+                    onChanged: (value) => {setState(() => content = value)},
+                  ),
                 )
               ],
             )),
         floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
           onPressed: () => {
             if (!_formkey.currentState!.validate())
               {_formkey.currentState!.save()}
