@@ -49,11 +49,11 @@ class NoteDb {
     await db.execute('''
 CREATE TABLE $tableImage (
      ${ImageFields.id} $primaryIdType,
-     ${ImageFields.imagePath} $primaryIdType,
-     ${ImageFields.noteId} $primaryIdType,
-     ${ImageFields.createdTime} $primaryIdType,
-     FOREIGN KEY (${ImageFields.noteId}) REFERENCES $tableNote ($primaryIdType)
-      ON DELETE CARCADE ON UPDATE NO ACTION
+     ${ImageFields.imagePath} $textTypeNull,
+     ${ImageFields.noteId} $integerType,
+     ${ImageFields.createdTime} $textType,
+     FOREIGN KEY (${ImageFields.noteId}) REFERENCES $tableNote (${NoteFields.id})
+      ON DELETE CASCADE ON UPDATE NO ACTION
     )
 ''');
   }
