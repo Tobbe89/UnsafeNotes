@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/src/provider.dart';
 import 'package:unsafenote/db/NoteDb.dart';
 import 'package:unsafenote/main.dart';
+import 'package:unsafenote/model/image_model.dart';
 import 'package:unsafenote/model/note_model.dart';
 import 'package:unsafenote/provider/note_provider.dart';
 import 'package:unsafenote/screens/card_widgets.dart/custom_button.dart';
@@ -18,10 +23,23 @@ class _AddNoteState extends State<AddNote> {
   //late String? header;
   late String content;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  File? image;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  Future pickImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.camera);
+      if (image == null) return;
+
+      final imageTemporary = File(image.path);
+      setState(() => this.image = imageTemporary);
+    } on PlatformException catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -85,6 +103,13 @@ class _AddNoteState extends State<AddNote> {
           )),
       floatingActionButton:
           Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+        ElevatedButton(
+            onPressed: () {
+              pickImage();
+            },
+            child: const Icon(
+              Icons.camera_alt,
+            )),
         CustomButton(
           text: "Save",
           onSelected: () => {

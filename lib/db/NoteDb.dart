@@ -1,3 +1,4 @@
+import 'package:unsafenote/model/image_model.dart';
 import 'package:unsafenote/model/note_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -11,7 +12,7 @@ class NoteDb {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('note.db');
+    _database = await _initDB('unsafenote.db');
     return _database!;
   }
 
@@ -45,6 +46,16 @@ class NoteDb {
       ${NoteFields.createdTime} $textType
     )
     ''');
+    await db.execute('''
+CREATE TABLE $tableImage (
+     ${ImageFields.id} $primaryIdType,
+     ${ImageFields.imagePath} $primaryIdType,
+     ${ImageFields.noteId} $primaryIdType,
+     ${ImageFields.createdTime} $primaryIdType,
+     FOREIGN KEY (${ImageFields.noteId}) REFERENCES $tableNote ($primaryIdType)
+      ON DELETE CARCADE ON UPDATE NO ACTION
+    )
+''');
   }
 
   Future<NoteModel> createNote(NoteModel note) async {
@@ -52,6 +63,14 @@ class NoteDb {
     final id = await db.insert(tableNote, note.toJson());
 
     return note.copy(id: id);
+  }
+
+  Future<ImageModel> createImage(ImageModel model) async {
+    final db = await instance.database;
+
+    final id = await db.insert(tableImage, model.toJson());
+
+    return model.copy(id: id);
   }
 
   Future<NoteModel> readNote(int id) async {
