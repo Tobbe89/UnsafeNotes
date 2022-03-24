@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:unsafenote/provider/note_provider.dart';
+import 'package:unsafenote/provider/image_provider.dart';
 import 'package:unsafenote/screens/first.dart';
 import 'package:unsafenote/screens/second.dart';
 
@@ -9,6 +10,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => NoteProvider()),
+        ChangeNotifierProvider(create: (_) => ImageProviderr())
       ],
       child: MyApp(),
     ),

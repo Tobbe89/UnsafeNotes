@@ -8,6 +8,7 @@ import 'package:unsafenote/db/NoteDb.dart';
 import 'package:unsafenote/main.dart';
 import 'package:unsafenote/model/image_model.dart';
 import 'package:unsafenote/model/note_model.dart';
+import 'package:unsafenote/provider/image_provider.dart';
 import 'package:unsafenote/provider/note_provider.dart';
 import 'package:unsafenote/screens/card_widgets.dart/custom_button.dart';
 import 'package:unsafenote/screens/first.dart';
@@ -24,10 +25,14 @@ class _AddNoteState extends State<AddNote> {
   late String content;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   File? image;
-
+  late List<String> imageList;
   @override
   void initState() {
     super.initState();
+  }
+
+  Future addImageToList(String imagePath) async {
+    imageList.add(imagePath);
   }
 
   Future pickImage() async {
@@ -43,10 +48,20 @@ class _AddNoteState extends State<AddNote> {
   }
 
   @override
-  void addSong(BuildContext context) {
+  Future<void> addSong(BuildContext context, List<String> image) async {
     final note = NoteModel(content: content, createdTime: DateTime.now());
 
-    context.read<NoteProvider>().addNote(note);
+    NoteModel _note = await context.read<NoteProvider>().addNote(note);
+
+    if (image.isNotEmpty) {
+      for (int i = 0; i < image.length; i++) {
+        final _image = ImageModel(
+            imagePath: image[i],
+            noteId: _note.id!,
+            createdTime: DateTime.now());
+        context.read<ImageProviderr>().addImage(_image);
+      }
+    }
   }
 
   @override
@@ -117,7 +132,7 @@ class _AddNoteState extends State<AddNote> {
               {_formkey.currentState!.save()}
             else
               {
-                addSong(context),
+                addSong(context, imageList),
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const MyHomePage()))
               }

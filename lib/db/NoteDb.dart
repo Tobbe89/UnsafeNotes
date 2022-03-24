@@ -88,6 +88,21 @@ CREATE TABLE $tableImage (
     }
   }
 
+  Future<ImageModel> readImages(int id) async {
+    final db = await instance.database;
+
+    final maps = await db.query(tableNote,
+        columns: NoteFields.values,
+        where: '${NoteFields.id} = ?',
+        whereArgs: [id]);
+
+    if (maps.isNotEmpty) {
+      return ImageModel.fromJson(maps.first);
+    } else {
+      throw Exception('Id $id not found');
+    }
+  }
+
   Future<List<NoteModel>> readAllNotes() async {
     final db = await instance.database;
 
@@ -96,6 +111,16 @@ CREATE TABLE $tableImage (
     final result = await db.query(tableNote, orderBy: orderByTime);
 
     return result.map((json) => NoteModel.fromJson(json)).toList();
+  }
+
+  Future<List<ImageModel>> readAllImages() async {
+    final db = await instance.database;
+
+    final orderByTime = '${ImageFields.createdTime} ASC';
+
+    final result = await db.query(tableNote, orderBy: orderByTime);
+
+    return result.map((json) => ImageModel.fromJson(json)).toList();
   }
 
   Future<int> update(NoteModel note) async {
