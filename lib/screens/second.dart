@@ -25,13 +25,13 @@ class _AddNoteState extends State<AddNote> {
   late String content;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   File? image;
-  late List<String> imageList;
+  late List<String?> imageList;
   @override
   void initState() {
     super.initState();
   }
 
-  Future addImageToList(String imagePath) async {
+  Future addImageToList(String? imagePath) async {
     imageList.add(imagePath);
   }
 
@@ -48,7 +48,7 @@ class _AddNoteState extends State<AddNote> {
   }
 
   @override
-  Future<void> addSong(BuildContext context, List<String> image) async {
+  Future<void> addSong(BuildContext context, List<String?> image) async {
     final note = NoteModel(content: content, createdTime: DateTime.now());
 
     NoteModel _note = await context.read<NoteProvider>().addNote(note);
@@ -56,7 +56,7 @@ class _AddNoteState extends State<AddNote> {
     if (image.isNotEmpty) {
       for (int i = 0; i < image.length; i++) {
         final _image = ImageModel(
-            imagePath: image[i],
+            imagePath: image[i]!,
             noteId: _note.id!,
             createdTime: DateTime.now());
         context.read<ImageProviderr>().addImage(_image);
