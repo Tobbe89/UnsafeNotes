@@ -24,7 +24,17 @@ class _MainPageState extends State<MainPage> {
             child: Scaffold(
                 // backgroundColor: Colors.blue[900],
                 body: value.getNoteList().isEmpty
-                    ? const Text("Tomt!")
+                    ? Center(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.arrow_right,
+                                size: 100,
+                              ),
+                              Text("Swipe right")
+                            ]),
+                      )
                     : Scrollbar(
                         controller: _scroll,
                         isAlwaysShown: true,

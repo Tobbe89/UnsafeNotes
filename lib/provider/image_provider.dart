@@ -14,6 +14,10 @@ class ImageProviderr extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<ImageModel> getImageWithId(int id) {
+    return images.where((element) => element.id == id).toList();
+  }
+
   void addImage(ImageModel image) {
     NoteDb.instance.createImage(image);
   }

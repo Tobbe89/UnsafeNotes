@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
+import 'package:unsafenote/model/image_model.dart';
 import 'package:unsafenote/model/note_model.dart';
+import 'package:unsafenote/provider/image_provider.dart';
 import 'package:unsafenote/provider/note_provider.dart';
 import 'package:unsafenote/screens/card_widgets.dart/dialog.dart';
 
@@ -10,6 +12,10 @@ class NoteElement extends StatelessWidget {
 
   void deleteOnHold(BuildContext context) {
     context.read<NoteProvider>().deleteNote(note.id);
+  }
+
+  List<ImageModel> getImagesWithId(BuildContext context, int id) {
+    return context.read<ImageProviderr>().getImageWithId(id);
   }
 
   _onDelteDialogButton(BuildContext context) {
