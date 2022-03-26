@@ -35,10 +35,16 @@ class _MainPageState extends State<MainPage> {
                               Text("Swipe right")
                             ]),
                       )
-                    : Scrollbar(
-                        controller: _scroll,
-                        isAlwaysShown: true,
-                        child: buildNote(context))),
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                            Scrollbar(
+                                controller: _scroll,
+                                isAlwaysShown: true,
+                                child: buildNote(context)),
+                          ])),
           ),
         );
       },

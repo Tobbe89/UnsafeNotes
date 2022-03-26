@@ -118,7 +118,7 @@ CREATE TABLE $tableImage (
 
     final orderByTime = '${ImageFields.createdTime} ASC';
 
-    final result = await db.query(tableNote, orderBy: orderByTime);
+    final result = await db.query(tableImage, orderBy: orderByTime);
 
     return result.map((json) => ImageModel.fromJson(json)).toList();
   }

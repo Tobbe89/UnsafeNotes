@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 import 'package:unsafenote/model/image_model.dart';
 import 'package:unsafenote/model/note_model.dart';
 import 'package:unsafenote/provider/image_provider.dart';
 import 'package:unsafenote/provider/note_provider.dart';
 import 'package:unsafenote/screens/card_widgets.dart/dialog.dart';
+import 'package:unsafenote/screens/card_widgets.dart/image_small_view.dart';
 
 class NoteElement extends StatelessWidget {
   const NoteElement({Key? key, required this.note}) : super(key: key);
@@ -58,7 +60,36 @@ class NoteElement extends StatelessWidget {
             subtitle: Padding(
               padding:
                   const EdgeInsets.only(left: 2, top: 5, bottom: 5, right: 2),
-              child: Text(note.content),
+              child: Row(children: [
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                          note.content,
+                        )
+                      ]),
+                ),
+                if (Provider.of<ImageProviderr>(context)
+                    .getImageWithId(note.id!)
+                    .isNotEmpty)
+                  //   Column(children: [
+                  //     Scrollbar(
+                  //       child: buildImages(context),
+                  //     ),
+                  //   ])
+
+                  Expanded(
+                      flex: 1,
+                      child: Column(children: [
+                        Scrollbar(
+                          child: buildImages(context),
+                        ),
+                      ]))
+              ]),
             ),
           ),
           margin: const EdgeInsets.all(20),
@@ -66,4 +97,16 @@ class NoteElement extends StatelessWidget {
       ),
     );
   }
+
+  Widget buildImages(BuildContext context) =>
+      Consumer<ImageProviderr>(builder: (context, value, child) {
+        return ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: value.getImageWithId(note.id!).length,
+            itemBuilder: (context, index) {
+              final _image = value.getImageWithId(note.id!)[index];
+              return SmallImage(imagePath: _image.imagePath);
+            });
+      });
 }

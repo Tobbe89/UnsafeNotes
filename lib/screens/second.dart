@@ -25,7 +25,7 @@ class _AddNoteState extends State<AddNote> {
   late String content;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   File? image;
-  late List<String?> imageList;
+  late List<String?> imageList = [];
   @override
   void initState() {
     super.initState();
@@ -41,6 +41,7 @@ class _AddNoteState extends State<AddNote> {
       if (image == null) return;
 
       final imageTemporary = File(image.path);
+      imageList.add(image.path);
       setState(() => this.image = imageTemporary);
     } on PlatformException catch (e) {
       print(e);
@@ -48,15 +49,15 @@ class _AddNoteState extends State<AddNote> {
   }
 
   @override
-  Future<void> addSong(BuildContext context, List<String?> image) async {
+  Future<void> addSong(BuildContext context) async {
     final note = NoteModel(content: content, createdTime: DateTime.now());
 
     NoteModel _note = await context.read<NoteProvider>().addNote(note);
 
-    if (image.isNotEmpty) {
-      for (int i = 0; i < image.length; i++) {
+    if (imageList.isNotEmpty) {
+      for (int i = 0; i < imageList.length; i++) {
         final _image = ImageModel(
-            imagePath: image[i]!,
+            imagePath: imageList[i]!,
             noteId: _note.id!,
             createdTime: DateTime.now());
         context.read<ImageProviderr>().addImage(_image);
@@ -118,25 +119,42 @@ class _AddNoteState extends State<AddNote> {
           )),
       floatingActionButton:
           Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-        ElevatedButton(
-            onPressed: () {
-              pickImage();
-            },
-            child: const Icon(
-              Icons.camera_alt,
-            )),
-        CustomButton(
-          text: "Save",
-          onSelected: () => {
-            if (!_formkey.currentState!.validate())
-              {_formkey.currentState!.save()}
-            else
-              {
-                addSong(context, imageList),
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const MyHomePage()))
-              }
-          },
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            width: 200,
+            child: ElevatedButton(
+                onPressed: () {
+                  pickImage();
+                },
+                child: const Icon(
+                  Icons.camera_alt,
+                )),
+          ),
+        ),
+        SizedBox(
+          width: 20,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            width: 100,
+            child: CustomButton(
+              text: "Save",
+              onSelected: () => {
+                if (!_formkey.currentState!.validate())
+                  {_formkey.currentState!.save()}
+                else
+                  {
+                    addSong(context),
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MyHomePage()))
+                  }
+              },
+            ),
+          ),
         ),
       ]),
     );
