@@ -8,17 +8,22 @@ import 'package:unsafenote/provider/note_provider.dart';
 import 'package:unsafenote/screens/card_widgets.dart/dialog.dart';
 import 'package:unsafenote/screens/card_widgets.dart/image_small_view.dart';
 
-class NoteElement extends StatelessWidget {
+class NoteElement extends StatefulWidget {
   const NoteElement({Key? key, required this.note}) : super(key: key);
   final NoteModel note;
+  State<NoteElement> createState() => _NoteElement();
+}
 
+class _NoteElement extends State<NoteElement> {
   void deleteOnHold(BuildContext context) {
-    context.read<NoteProvider>().deleteNote(note.id);
+    context.read<NoteProvider>().deleteNote(widget.note.id);
   }
 
   List<ImageModel> getImagesWithId(BuildContext context, int id) {
     return context.read<ImageProviderr>().getImageWithId(id);
   }
+
+  final ScrollController _scroll = ScrollController();
 
   _onDelteDialogButton(BuildContext context) {
     ValidateOnDelete validate = ValidateOnDelete(
@@ -55,11 +60,12 @@ class NoteElement extends StatelessWidget {
                     blurRadius: 2.0,
                     offset: Offset(2.0, 2.0))
               ]),
-          child: ListTile(
+          child: Scrollbar(
+            controller: _scroll,
             //leading: Icon(Icons.music_note),
-            subtitle: Padding(
+            child: Padding(
               padding:
-                  const EdgeInsets.only(left: 2, top: 5, bottom: 5, right: 2),
+                  const EdgeInsets.only(left: 2, top: 5, bottom: 5, right: 5),
               child: Row(children: [
                 Expanded(
                   flex: 1,
@@ -69,26 +75,27 @@ class NoteElement extends StatelessWidget {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
-                          note.content,
+                          widget.note.content,
                         )
                       ]),
                 ),
-                if (Provider.of<ImageProviderr>(context)
-                    .getImageWithId(note.id!)
-                    .isNotEmpty)
-                  //   Column(children: [
-                  //     Scrollbar(
-                  //       child: buildImages(context),
-                  //     ),
-                  //   ])
+                // if (Provider.of<ImageProviderr>(context)
+                //     .getImageWithId(widget.note.id!)
+                //     .isNotEmpty)
+                //   Column(children: [
+                //     Scrollbar(
+                //       child: buildImages(context),
+                //     ),
+                //   ])
 
-                  Expanded(
-                      flex: 1,
-                      child: Column(children: [
-                        Scrollbar(
-                          child: buildImages(context),
-                        ),
-                      ]))
+                Expanded(
+                    flex: 1,
+                    child: Column(children: [
+                      Scrollbar(
+                        controller: _scroll,
+                        child: buildImages(context),
+                      ),
+                    ]))
               ]),
             ),
           ),
@@ -101,11 +108,12 @@ class NoteElement extends StatelessWidget {
   Widget buildImages(BuildContext context) =>
       Consumer<ImageProviderr>(builder: (context, value, child) {
         return ListView.builder(
+            controller: _scroll,
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
-            itemCount: value.getImageWithId(note.id!).length,
+            itemCount: value.getImageWithId(widget.note.id!).length,
             itemBuilder: (context, index) {
-              final _image = value.getImageWithId(note.id!)[index];
+              final _image = value.getImageWithId(widget.note.id!)[index];
               return SmallImage(imagePath: _image.imagePath);
             });
       });
